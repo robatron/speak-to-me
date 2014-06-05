@@ -22,6 +22,12 @@ Grab an base64-ofuscated link to the current saying by copying the link from the
 
 This is useful for linking to coworkers without obviously revealing what the browser is about to say to them!
 
+## Examples
+
+- http://robatron.github.io/speak-to-me#B64%3ATm93JTJDJTIwdGhpcyUyMGlzJTIwYSUyMHN0b3J5JTIwYWxsJTIwYWJvdXQlMjBob3clMjBNeSUyMGxpZmUlMjBnb3QlMjBmbGlwcGVkLXR1cm5lZCUyMHVwc2lkZSUyMGRvd24lMjBBbmQlMjBJJ2QlMjBsaWtlJTIwdG8lMjB0YWtlJTIwYSUyMG1pbnV0ZSUyMEp1c3QlMjBzaXQlMjByaWdodCUyMHRoZXJlJTIwSSdsbCUyMHRlbGwlMjB5b3UlMjBob3clMjBJJTIwYmVjYW1lJTIwdGhlJTIwcHJpbmNlJTIwb2YlMjBhJTIwdG93biUyMGNhbGxlZCUyMEJlbCUyMEFpcg==
+- http://robatron.github.io/speak-to-me#B64%3ARGVzY3JpYmUlMjB3aGF0JTIwTWFyc2VsbHVzJTIwV2FsbGFjZSUyMGxvb2tzJTIwbGlrZSE=
+- 
+
 ## Credits
 
 - Icons by [GLYPHICONS ](http://glyphicons.com/)
