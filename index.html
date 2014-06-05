@@ -116,6 +116,8 @@
             var url = URL + location.hash;
             var sneakyUrl = URL + '#' + encodeURIComponent( B64_MARKER ) + btoa( msg );
 
+            console.log( 'sneakyUrl:', sneakyUrl );
+
             $shareSection.style.visibility = 'visible';
             $shareLink.innerHTML = url;
             $shareLink.href = url;
@@ -133,8 +135,10 @@
 
     // Decode if necessary
     if ( initMessage.indexOf( B64_MARKER ) === 0 ) {
-        initMessage = atob( initMessage.replace( B64_MARKER, '' ) )
+        initMessage = decodeURIComponent( atob( initMessage.replace( B64_MARKER, '' ) ) )
     }
+
+    console.log( 'initMessage:', initMessage );
 
     if ( initMessage ) {
         $messageBox.value = initMessage;
