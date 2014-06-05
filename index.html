@@ -10,8 +10,11 @@
         padding: 20px;
     }
 
+    .no-support-error-message {
+        display: none;
+    }
+
     .controls {
-        margin-top: 60px;
         margin-bottom: 40px;
     }
     .controls > * {
@@ -60,6 +63,16 @@
 </style>
 
 <body>
+    <section class="no-support-error-message">
+        <p>
+            Your browser <strong>does not support</strong> the
+            <a href="http://updates.html5rocks.com/2014/01/Web-apps-that-talk---Introduction-to-the-Speech-Synthesis-API">
+            HTML5 Speech Synthesis API</a>.
+        </p>
+        <p>
+            Please use Chrome or Safari.
+        </p>
+    </section>
     <section class='controls'>
         <input class="message-box" placeholder="Type something to say...">
         <button class="speak-button">
@@ -79,6 +92,7 @@
     var B64_MARKER = 'B64:';
 
     // Bind DOM
+    var $noSupportErrMsg    = document.getElementsByClassName( 'no-support-error-message' )[ 0 ];
     var $messageBox         = document.getElementsByClassName( 'message-box' )[ 0 ];
     var $speakButton        = document.getElementsByClassName( 'speak-button' )[ 0 ];
     var $shareSection       = document.getElementsByClassName( 'share-section' )[ 0 ];
@@ -104,8 +118,13 @@
 
     // Helpers
     var speak = function ( message ) {
-        var utterance = new SpeechSynthesisUtterance( message );
-        speechSynthesis.speak( utterance );
+        // Report if browser supports API
+        if ( 'speechSynthesis' in window ) {
+            var utterance = new SpeechSynthesisUtterance( message );
+            speechSynthesis.speak( utterance );
+        } else {
+            $noSupportErrMsg.style.display = 'block';
+        }
     }
 
     var updateURLs = function ( message ) {
@@ -131,7 +150,7 @@
 
     // Init
     var args = location.hash.split( '#' );
-    var initMessage = args[ 1 ] ? decodeURIComponent( args[ 1 ] ) : null;
+    var initMessage = args[ 1 ] ? decodeURIComponent( args[ 1 ] ) : '';
 
     // Decode if necessary
     if ( initMessage.indexOf( B64_MARKER ) === 0 ) {
@@ -143,6 +162,6 @@
     if ( initMessage ) {
         $messageBox.value = initMessage;
         speak( initMessage );
-        updateURLs( initMessage );
+        //updateURLs( initMessage );
     }
 </script>
