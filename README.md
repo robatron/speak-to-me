@@ -2,11 +2,25 @@
 
 > A little utility to make your browser talk using the [HTML5 Speech Synth API](http://updates.html5rocks.com/2014/01/Web-apps-that-talk---Introduction-to-the-Speech-Synthesis-API)
 
-http://robatron.github.io/speak-to-me
+App can be found here: http://robatron.github.io/speak-to-me
 
 ## Usage
 
+From http://robatron.github.io/speak-to-me, just type what you want to say in the input box and press the `enter` key on your keyboard or the 'Speak!' button.
 
+### Directly in the URL
+
+You can type what you want to say directly into the URL after the `#` symbol, e.g.,
+
+  [http://robatron.github.io/speak-to-me#type what you want to say directly into the URL](http://robatron.github.io/speak-to-me#type what you want to say directly into the url after the hash)
+
+### Obfuscated linking
+
+Grab an base64-ofuscated link to the current saying by copying the link from the link symbol in the top right of the app, e.g., 
+
+  http://robatron.github.io/speak-to-me#B64%3AVGhpcyUyMGlzJTIwYW4lMjBvYmZ1c2NhdGVkJTIwc2F5aW5n
+
+This is useful for linking to coworkers without obviously revealing what the browser is about to say to them!
 
 ## Credits
 
