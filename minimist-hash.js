@@ -1,6 +1,6 @@
 /**
- * Parse "command-line" arguments from the location hash using modified
- * minimist at
+ * Parse command-line-like arguments from the location hash using modified
+ * minimist from
  * https://github.com/substack/minimist/blob/ce4a1e63a7e8d5ab88d2a3768adefa6af98a445a/index.js
  */
 minimist = function (args, opts) {
