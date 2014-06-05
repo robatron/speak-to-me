@@ -1,6 +1,91 @@
-<script src='./minimist-hash.js'></script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: Verdana, Geneva, sans-serif;
+    }
+    .container {
+        padding: 20px;
+        margin-top: 60px;
+    }
+    .container > * {
+        display: block;
+        padding: 10px;
+    }
+    .message-box {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .speak-button {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    @media (min-width: 500px) {
+        .container {
+            display: flex;
+        }
+        .message-box {
+            flex-grow: 1;
+            width: auto;
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+        .speak-button {
+            margin-left: 10px;
+        }
+    }
+</style>
+
+<div class='container'>
+    <input class="message-box" placeholder="Type something to say and press enter...">
+    <button class="speak-button">
+        Speak!
+    </button>
+</div>
+
 <script>
-    var rawArgs = location.hash.split( '#' )[ 1 ] || '';
-    var args = minimist( rawArgs.split( ' ' ) )
-    console.log( args );
+
+    // Helpers
+    var speak = function ( message ) {
+        var utterance = new SpeechSynthesisUtterance( message );
+        speechSynthesis.speak( utterance );
+    }
+
+    var updateHash = function ( message ) {
+        location.hash = encodeURIComponent( message );
+    }
+
+    // On load...
+    window.onload = function () {
+
+        // Bind DOM
+        var $messageBox  = document.getElementsByClassName( 'message-box' )[ 0 ];
+        var $speakButton = document.getElementsByClassName( 'speak-button' )[ 0 ]; 
+
+        $messageBox.onkeyup = function ( e ) {
+            var ENTER_KEY = 13;
+            if ( e.keyCode === ENTER_KEY ) {
+                var msg = $messageBox.value;
+                speak( msg );
+                updateHash( msg );
+            }
+        }
+
+        $speakButton.onclick = function ( e ) {
+            var msg = $messageBox.value;
+            speak( msg );
+            updateHash( msg );
+        }
+
+        // Init
+        var args = location.hash.split( '#' );
+        var initMessage = args[ 1 ] ? decodeURIComponent( args[ 1 ] ) : null;
+
+        if ( initMessage ) {
+            $messageBox.value = initMessage;
+            speak( initMessage );
+            updateHash( initMessage );
+        }
+    }
 </script>
