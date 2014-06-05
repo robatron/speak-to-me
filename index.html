@@ -1,50 +1,106 @@
 <style>
     * {
-        margin: 0;
-        padding: 0;
         font-family: Verdana, Geneva, sans-serif;
     }
-    .container {
+    body {
+        max-width: 650px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
         padding: 20px;
-        margin-top: 60px;
     }
-    .container > * {
+
+    .controls {
+        margin-top: 60px;
+        margin-bottom: 40px;
+    }
+    .controls > * {
         display: block;
         padding: 10px;
     }
-    .message-box {
+    .controls .message-box {
         width: 100%;
         margin-bottom: 20px;
     }
-    .speak-button {
+    .controls .speak-button {
         display: block;
         margin-left: auto;
         margin-right: auto;
     }
+
+    .share-section {
+        visibility: hidden;
+    }
+
+    .share-section li {
+        margin-bottom: 20px;
+    }
+    .share-section li.share-url {
+        list-style-image: url( './img/glyphicons_222_share.png' );
+    }
+
+    .share-section li.sneaky-share-url {
+        list-style-image: url( './img/glyphicons_203_lock.png' );
+    }
+
     @media (min-width: 500px) {
-        .container {
+        .controls {
             display: flex;
         }
-        .message-box {
+        .controls .message-box {
             flex-grow: 1;
             width: auto;
             margin-right: 10px;
             margin-bottom: 0;
         }
-        .speak-button {
+        .controls .speak-button {
             margin-left: 10px;
         }
     }
 </style>
 
-<div class='container'>
-    <input class="message-box" placeholder="Type something to say and press enter...">
-    <button class="speak-button">
-        Speak!
-    </button>
-</div>
+<body>
+    <section class='controls'>
+        <input class="message-box" placeholder="Type something to say...">
+        <button class="speak-button">
+            Speak!
+        </button>
+    </section>
+    <section class='share-section'>
+        <ul class="urls">
+            <li class="share-url"><a href="<!-- js -->"><!-- js --></a></li>
+            <li class="sneaky-share-url"><a href="<!-- js -->"><!-- js --></a></li>
+        </ul>
+    </section>
+</body>
 
 <script>
+    var URL = 'http://robatron.github.io/speak-to-me';
+    var B64_MARKER = 'B64:';
+
+    // Bind DOM
+    var $messageBox         = document.getElementsByClassName( 'message-box' )[ 0 ];
+    var $speakButton        = document.getElementsByClassName( 'speak-button' )[ 0 ];
+    var $shareSection       = document.getElementsByClassName( 'share-section' )[ 0 ];
+    var $shareLink          = document.querySelector( '.share-url a' )
+    var $sneakyShareLink    = document.querySelector( '.sneaky-share-url a' )
+
+    $messageBox.onkeyup = function ( e ) {
+        var ENTER_KEY = 13;
+        var msg = $messageBox.value;
+        if ( e.keyCode === ENTER_KEY ) {
+            speak( msg );
+            updateURLs( msg );
+        } else {
+            updateURLs( msg );
+        }
+    }
+
+    $speakButton.onclick = function ( e ) {
+        var msg = $messageBox.value;
+        speak( msg );
+        updateURLs( msg );
+    }
 
     // Helpers
     var speak = function ( message ) {
@@ -52,40 +108,37 @@
         speechSynthesis.speak( utterance );
     }
 
-    var updateHash = function ( message ) {
-        location.hash = encodeURIComponent( message );
+    var updateURLs = function ( message ) {
+        var msg = encodeURIComponent( message );
+        location.hash = msg;
+
+        if ( msg ) {
+            var url = URL + location.hash;
+            var sneakyUrl = URL + '#' + encodeURIComponent( B64_MARKER ) + btoa( msg );
+
+            $shareSection.style.visibility = 'visible';
+            $shareLink.innerHTML = url;
+            $shareLink.href = url;
+
+            $sneakyShareLink.innerHTML = sneakyUrl;
+            $sneakyShareLink.href = sneakyUrl;
+        } else {
+            $shareSection.style.visibility = 'hidden';
+        }
     }
 
-    // On load...
-    window.onload = function () {
+    // Init
+    var args = location.hash.split( '#' );
+    var initMessage = args[ 1 ] ? decodeURIComponent( args[ 1 ] ) : null;
 
-        // Bind DOM
-        var $messageBox  = document.getElementsByClassName( 'message-box' )[ 0 ];
-        var $speakButton = document.getElementsByClassName( 'speak-button' )[ 0 ]; 
+    // Decode if necessary
+    if ( initMessage.indexOf( B64_MARKER ) === 0 ) {
+        initMessage = atob( initMessage.replace( B64_MARKER, '' ) )
+    }
 
-        $messageBox.onkeyup = function ( e ) {
-            var ENTER_KEY = 13;
-            if ( e.keyCode === ENTER_KEY ) {
-                var msg = $messageBox.value;
-                speak( msg );
-                updateHash( msg );
-            }
-        }
-
-        $speakButton.onclick = function ( e ) {
-            var msg = $messageBox.value;
-            speak( msg );
-            updateHash( msg );
-        }
-
-        // Init
-        var args = location.hash.split( '#' );
-        var initMessage = args[ 1 ] ? decodeURIComponent( args[ 1 ] ) : null;
-
-        if ( initMessage ) {
-            $messageBox.value = initMessage;
-            speak( initMessage );
-            updateHash( initMessage );
-        }
+    if ( initMessage ) {
+        $messageBox.value = initMessage;
+        speak( initMessage );
+        updateURLs( initMessage );
     }
 </script>
