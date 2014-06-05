@@ -12,6 +12,10 @@
 
     .no-support-error-message {
         display: none;
+        margin-bottom: 40px;
+        border: 2px solid red;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
     .controls {
@@ -42,10 +46,6 @@
         list-style-image: url( './img/glyphicons_222_share.png' );
     }
 
-    .share-section li.sneaky-share-url {
-        list-style-image: url( './img/glyphicons_203_lock.png' );
-    }
-
     @media (min-width: 500px) {
         .controls {
             display: flex;
@@ -70,7 +70,8 @@
             HTML5 Speech Synthesis API</a>.
         </p>
         <p>
-            Please use Chrome or Safari.
+            Please use <a href="http://google.com/chrome">Chrome</a> or
+            <a href="http://apple.com/safari">Safari</a>.
         </p>
     </section>
     <section class='controls'>
@@ -80,9 +81,8 @@
         </button>
     </section>
     <section class='share-section'>
-        <ul class="urls">
+        <ul>
             <li class="share-url"><a href="<!-- js -->"><!-- js --></a></li>
-            <li class="sneaky-share-url"><a href="<!-- js -->"><!-- js --></a></li>
         </ul>
     </section>
 </body>
@@ -97,7 +97,6 @@
     var $speakButton        = document.getElementsByClassName( 'speak-button' )[ 0 ];
     var $shareSection       = document.getElementsByClassName( 'share-section' )[ 0 ];
     var $shareLink          = document.querySelector( '.share-url a' )
-    var $sneakyShareLink    = document.querySelector( '.sneaky-share-url a' )
 
     $messageBox.onkeyup = function ( e ) {
         var ENTER_KEY = 13;
@@ -118,7 +117,6 @@
 
     // Helpers
     var speak = function ( message ) {
-        // Report if browser supports API
         if ( 'speechSynthesis' in window ) {
             var utterance = new SpeechSynthesisUtterance( message );
             speechSynthesis.speak( utterance );
@@ -132,17 +130,11 @@
         location.hash = msg;
 
         if ( msg ) {
-            var url = URL + location.hash;
-            var sneakyUrl = URL + '#' + encodeURIComponent( B64_MARKER ) + btoa( msg );
-
-            console.log( 'sneakyUrl:', sneakyUrl );
+            var shareUrl = URL + '#' + encodeURIComponent( B64_MARKER ) + btoa( msg );
 
             $shareSection.style.visibility = 'visible';
-            $shareLink.innerHTML = url;
-            $shareLink.href = url;
-
-            $sneakyShareLink.innerHTML = sneakyUrl;
-            $sneakyShareLink.href = sneakyUrl;
+            $shareLink.innerHTML = shareUrl;
+            $shareLink.href = shareUrl;
         } else {
             $shareSection.style.visibility = 'hidden';
         }
@@ -162,6 +154,6 @@
     if ( initMessage ) {
         $messageBox.value = initMessage;
         speak( initMessage );
-        //updateURLs( initMessage );
+        updateURLs( initMessage );
     }
 </script>
