@@ -1,13 +1,20 @@
 <style>
-    * {
-        font-family: Verdana, Geneva, sans-serif;
-    }
     body {
-        max-width: 650px;
+        font-family: Verdana, Geneva, sans-serif;
+        min-width: 100px;
+        max-width: 500px;
         display: block;
         margin-left: auto;
         margin-right: auto;
-        padding: 20px;
+        padding: 20px 20px 40px;
+    }
+
+    nav {
+        margin-bottom: 40px;
+    }
+
+    nav .share-link {
+        float: right;
     }
 
     .no-support-error-message {
@@ -27,42 +34,42 @@
     }
     .controls .message-box {
         width: 100%;
+        margin-top: 0;
         margin-bottom: 20px;
+        margin-left: 0;
     }
     .controls .speak-button {
         display: block;
-        margin-left: auto;
+        margin-top: 0;
         margin-right: auto;
+        margin-bottom: 0;
+        margin-left: auto;
     }
 
-    .share-section {
-        visibility: hidden;
-    }
-
-    .share-section li {
-        margin-bottom: 20px;
-    }
-    .share-section li.share-url {
-        list-style-image: url( './img/glyphicons_222_share.png' );
-    }
-
-    @media (min-width: 500px) {
+    @media (min-width: 350px) {
         .controls {
             display: flex;
         }
         .controls .message-box {
             flex-grow: 1;
             width: auto;
-            margin-right: 10px;
+            margin-right: 5px;
             margin-bottom: 0;
         }
         .controls .speak-button {
-            margin-left: 10px;
+            margin-top: 0;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: 5px;
         }
     }
 </style>
 
 <body>
+    <nav>
+        <a class="project-link" href="https://github.com/robatron/speak-to-me"><img src="./img/glyphicons_social_21_github.png"></a>
+        <a class="share-link" href="<!-- js -->"><img src="./img/glyphicons_050_link.png"></a>
+    </nav>
     <section class="no-support-error-message">
         <p>
             Your browser <strong>does not support</strong> the
@@ -80,11 +87,6 @@
             Speak!
         </button>
     </section>
-    <section class='share-section'>
-        <ul>
-            <li class="share-url"><a href="<!-- js -->"><!-- js --></a></li>
-        </ul>
-    </section>
 </body>
 
 <script>
@@ -95,8 +97,7 @@
     var $noSupportErrMsg    = document.getElementsByClassName( 'no-support-error-message' )[ 0 ];
     var $messageBox         = document.getElementsByClassName( 'message-box' )[ 0 ];
     var $speakButton        = document.getElementsByClassName( 'speak-button' )[ 0 ];
-    var $shareSection       = document.getElementsByClassName( 'share-section' )[ 0 ];
-    var $shareLink          = document.querySelector( '.share-url a' )
+    var $shareLink          = document.getElementsByClassName( 'share-link' )[ 0 ];
 
     $messageBox.onkeyup = function ( e ) {
         var ENTER_KEY = 13;
@@ -127,29 +128,17 @@
 
     var updateURLs = function ( message ) {
         var msg = encodeURIComponent( message );
-        location.hash = msg;
-
-        if ( msg ) {
-            var shareUrl = URL + '#' + encodeURIComponent( B64_MARKER ) + btoa( msg );
-
-            $shareSection.style.visibility = 'visible';
-            $shareLink.innerHTML = shareUrl;
-            $shareLink.href = shareUrl;
-        } else {
-            $shareSection.style.visibility = 'hidden';
-        }
+        $shareLink.href = URL + '#' + encodeURIComponent( B64_MARKER ) + btoa( msg );
     }
 
     // Init
     var args = location.hash.split( '#' );
     var initMessage = args[ 1 ] ? decodeURIComponent( args[ 1 ] ) : '';
 
-    // Decode if necessary
+    // Decode init message if necessary
     if ( initMessage.indexOf( B64_MARKER ) === 0 ) {
         initMessage = decodeURIComponent( atob( initMessage.replace( B64_MARKER, '' ) ) )
     }
-
-    console.log( 'initMessage:', initMessage );
 
     if ( initMessage ) {
         $messageBox.value = initMessage;
