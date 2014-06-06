@@ -128,9 +128,9 @@
 
     var updateURLs = function ( message ) {
         var msg = encodeURIComponent( message );
-        var url = URL + '#' + encodeURIComponent( B64_MARKER ) + btoa( msg );
-        location.hash = url;
-        $shareLink.href = url;
+        var newHash = encodeURIComponent( B64_MARKER ) + btoa( msg );
+        location.hash = newHash;
+        $shareLink.href = URL + '#' + newHash;
     }
 
     // Init
